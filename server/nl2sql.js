@@ -2,33 +2,35 @@
  * NL2SQL: Gemini API when GEMINI_API_KEY is set, otherwise rule-based fallback.
  */
 
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI } from "@google/genai";
 
 let schemaInfo = [];
 
 export function initSchema(db) {
-  const tables = db.prepare(
-    "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT IN ('prompt_cache', 'query_logs', 'allowed_tables')"
-  ).all();
+  const tables = db
+    .prepare(
+      "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT IN ('prompt_cache', 'query_logs', 'allowed_tables')",
+    )
+    .all();
   schemaInfo = tables.map(({ name }) => {
     const cols = db.prepare(`PRAGMA table_info(${name})`).all();
-    return { table: name, columns: cols.map(c => c.name) };
+    return { table: name, columns: cols.map((c) => c.name) };
   });
 }
 
 function getSchemaPrompt() {
   const lines = schemaInfo.map(
-    ({ table, columns }) => `- ${table}(${columns.join(', ')})`
+    ({ table, columns }) => `- ${table}(${columns.join(", ")})`,
   );
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 function extractSQL(text) {
-  if (!text || typeof text !== 'string') return null;
+  if (!text || typeof text !== "string") return null;
   let s = text.trim();
   const codeBlock = s.match(/```(?:sql)?\s*([\s\S]*?)```/i);
   if (codeBlock) s = codeBlock[1].trim();
-  if (!s.toUpperCase().startsWith('SELECT')) return null;
+  if (!s.toUpperCase().startsWith("SELECT")) return null;
   return s;
 }
 
@@ -36,18 +38,58 @@ function extractSQL(text) {
  * Generate SQL using Gemini when API key is set, else use rule-based fallback.
  */
 export async function promptToSQL(prompt, db) {
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-  if (apiKey) {
-    try {
-      const sql = await generateWithGemini(prompt, apiKey);
-      if (sql) return sql;
-    } catch (err) {
-      console.warn('Gemini NL2SQL failed, using fallback:', err.message);
-    }
-  }
-  return fallbackPromptToSQL(prompt, db);
-}
+  //  Get full schema dynamically from SQLite
+  const tables = db
+    .prepare(
+      `
+    SELECT name FROM sqlite_master 
+    WHERE type='table' AND name NOT LIKE 'sqlite_%'
+  `,
+    )
+    .all();
 
+  let schemaDescription = "";
+
+  for (const table of tables) {
+    const columns = db.prepare(`PRAGMA table_info(${table.name})`).all();
+    const columnDefs = columns
+      .map((col) => `${col.name} (${col.type})`)
+      .join(", ");
+    schemaDescription += `Table: ${table.name}\nColumns: ${columnDefs}\n\n`;
+  }
+
+  //  Strict system instruction for Gemini
+  const systemInstruction = `
+You are a SQL generator.
+
+Rules:
+- ONLY generate a valid SQL SELECT query.
+- DO NOT explain anything.
+- DO NOT add markdown.
+- DO NOT add comments.
+- DO NOT generate INSERT, UPDATE, DELETE, DROP, ALTER.
+- Return ONLY raw SQL.
+
+Database schema:
+${schemaDescription}
+`;
+
+  // Call Gemini
+  const response = await gemini.generateContent({
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: systemInstruction + "\nUser request: " + prompt }],
+      },
+    ],
+  });
+
+  const text = response.response.text();
+
+  if (!text) return null;
+
+  return text.trim();
+}
 async function generateWithGemini(prompt, apiKey) {
   const ai = new GoogleGenAI({ apiKey });
   const schema = getSchemaPrompt();
@@ -62,7 +104,7 @@ Question: ${prompt}
 Respond with only the SELECT statement.`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash',
+    model: "gemini-2.0-flash",
     contents: fullPrompt,
   });
 
@@ -71,7 +113,9 @@ Respond with only the SELECT statement.`;
 }
 
 function getTableColumns(tableName) {
-  const t = schemaInfo.find(s => s.table.toLowerCase() === tableName.toLowerCase());
+  const t = schemaInfo.find(
+    (s) => s.table.toLowerCase() === tableName.toLowerCase(),
+  );
   return t ? t.columns : [];
 }
 
@@ -87,13 +131,17 @@ function fallbackPromptToSQL(prompt, db) {
   if (/\blast\s+month\b|\bsales\s+from\s+last\s+month\b/i.test(p)) {
     const d = new Date();
     d.setMonth(d.getMonth() - 1);
-    const start = d.toISOString().slice(0, 7) + '-01';
-    const end = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().slice(0, 10);
+    const start = d.toISOString().slice(0, 7) + "-01";
+    const end = new Date(d.getFullYear(), d.getMonth() + 1, 0)
+      .toISOString()
+      .slice(0, 10);
     return `SELECT SUM(total) AS total_sales FROM orders WHERE order_date BETWEEN '${start}' AND '${end}'`;
   }
   if (/\btop\s+\d+\s+products?\b|\bproducts?\s+by\s+revenue\b/i.test(p)) {
     const limitMatch = p.match(/top\s+(\d+)/i);
-    const limit = limitMatch ? Math.min(parseInt(limitMatch[1], 10) || 5, 100) : 5;
+    const limit = limitMatch
+      ? Math.min(parseInt(limitMatch[1], 10) || 5, 100)
+      : 5;
     return `SELECT p.name AS product_name, SUM(oi.quantity * oi.unit_price) AS revenue, SUM(oi.quantity) AS units_sold
 FROM order_items oi
 JOIN products p ON p.id = oi.product_id
@@ -124,9 +172,9 @@ ORDER BY revenue DESC`;
   }
 
   for (const { table } of schemaInfo) {
-    if (p.includes(table) || p.includes(table.replace(/s$/, ''))) {
+    if (p.includes(table) || p.includes(table.replace(/s$/, ""))) {
       const cols = getTableColumns(table);
-      const colList = cols.length ? cols.join(', ') : '*';
+      const colList = cols.length ? cols.join(", ") : "*";
       return `SELECT ${colList} FROM ${table} LIMIT 50`;
     }
   }
