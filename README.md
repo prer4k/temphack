@@ -27,19 +27,13 @@ If `GEMINI_API_KEY` is missing or invalid, the app falls back to built-in rule-b
 
 ## Run
 
-1. Start the API server (SQLite + NL2SQL + safety):
-
-   ```bash
-   npm run server
-   ```
-
-2. In another terminal, start the Vite dev server (proxies `/api` to the server):
+1. Start the Vite dev server (proxies `/api` to the server):
 
    ```bash
    npm run dev
    ```
 
-3. Open **http://localhost:5173**.
+2. Open **http://localhost:5173**.
 
 To run both in one go:
 
@@ -59,11 +53,4 @@ npm run dev:all
 - Only a single `SELECT` is allowed; forbidden verbs and multiple statements are rejected.
 - Table access can be restricted via the Admin Panel “Allowed Tables” (stored in `allowed_tables`).
 
-## Caching
-
-- Prompts are normalized (lowercase, trimmed, collapsed spaces) and hashed.
-- First time: prompt → NL2SQL → SQL stored in `prompt_cache` and executed.
-- Next time the same (or normalized-same) prompt: SQL is read from `prompt_cache` and executed; no regeneration.
-
-Gemini is used in `server/nl2sql.js`; the same caching and safety flow apply.
 # temphack
