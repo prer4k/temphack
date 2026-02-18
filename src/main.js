@@ -203,12 +203,41 @@ const TESTIMONIALS_DATA = [
 function init() {
   const app = el("app");
   app.innerHTML = `
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <button class="sidebar-collapse" id="sidebar-collapse" title="Collapse sidebar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <nav class="sidebar-nav">
+        <button class="sidebar-item sidebar-item-active" data-tab="home">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span class="sidebar-label">Home</span>
+        </button>
+        <button class="sidebar-item" data-tab="analytics">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span class="sidebar-label">Analytics</span>
+        </button>
+        <button class="sidebar-item" data-tab="users">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="sidebar-label">Users</span>
+        </button>
+        <button class="sidebar-item" data-tab="settings">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span class="sidebar-label">Settings</span>
+        </button>
+      </nav>
+      <button class="sidebar-logout">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span class="sidebar-label">Logout</span>
+      </button>
+    </aside>
+
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
       <div class="nav-inner">
         <div class="nav-brand">
           <div class="nav-logo-dot"></div>
-          <span class="nav-brand-text">Chaos<span class="nav-brand-white">UI</span></span>
+          <span class="nav-brand-text">NL<span class="nav-brand-white">2SQL</span></span>
         </div>
         <div class="nav-links">
           <a href="#features" class="nav-link">Features</a>
@@ -231,23 +260,8 @@ function init() {
       <div class="hero-glow hero-glow-2"></div>
       <div class="hero-inner">
 
-        <div class="status-badge">
-          <span class="status-dot-wrap">
-            <span class="status-ping"></span>
-            <span class="status-core"></span>
-          </span>
-          System Status: Unstable
-        </div>
-
-        <h1 class="hero-title">
-          <span class="hero-title-top">Experience the</span>
-          <br/>
-          <span class="hero-title-gradient">Modern Web</span>
-        </h1>
-
         <!-- ===== SQL DASHBOARD (stitched in) ===== -->
         <div class="dashboard-card" id="dashboard">
-          <h2 class="dashboard-heading">Prompt to SQL Dashboard</h2>
           <label class="prompt-label" for="prompt-input">Ask your question in plain english</label>
           <textarea id="prompt-input" class="prompt-input" placeholder="eg: Show total sales from last month"></textarea>
           <div class="generate-wrap">
@@ -277,20 +291,13 @@ function init() {
         </div>
         <!-- ===== END SQL DASHBOARD ===== -->
 
-        <div class="hero-buttons">
-          <button class="hero-btn-primary">Get Started Now</button>
-          <button class="hero-btn-secondary">View Documentation</button>
-        </div>
       </div>
 
-      <div class="scroll-indicator">
-        <div class="scroll-mouse"><div class="scroll-dot"></div></div>
-      </div>
     </section>
 
     <!-- FEATURES -->
     <section class="features" id="features">
-      <h2 class="features-title">Why Choose Chaos?</h2>
+      <h2 class="features-title">Why Choose NL2SQL?</h2>
       <div class="features-grid">
         ${[
           {
@@ -325,7 +332,7 @@ function init() {
 
     <!-- TESTIMONIALS -->
     <section class="testimonials">
-      <h2 class="testimonials-title">TRUSTED BY NO ONE</h2>
+      <h2 class="testimonials-title">TRUSTED BY MILLIONS</h2>
       <div class="marquee-wrap">
         <div class="marquee-fade marquee-fade-left"></div>
         <div class="marquee-fade marquee-fade-right"></div>
@@ -395,6 +402,23 @@ function init() {
     });
     card.addEventListener("mouseleave", () => {
       if (line) line.style.opacity = "0";
+    });
+  });
+  // Sidebar collapse toggle
+  const sidebar = el("sidebar");
+  const collapseBtn = el("sidebar-collapse");
+  collapseBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+    app.classList.toggle("sidebar-collapsed");
+  });
+
+  // Sidebar tab active state
+  document.querySelectorAll(".sidebar-item").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".sidebar-item")
+        .forEach((b) => b.classList.remove("sidebar-item-active"));
+      btn.classList.add("sidebar-item-active");
     });
   });
 }

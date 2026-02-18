@@ -169,7 +169,7 @@ body {
 }
 
 .nav-user a {
-  color: var(--accent);
+  color: #2596be;
   text-decoration: none;
   margin-left: 4px;
 }
@@ -215,13 +215,12 @@ body {
 /* ───── HERO ───── */
 .hero {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 140px 24px 80px;
+  padding: 100px 24px 24px;
   overflow: hidden;
 }
 
@@ -263,12 +262,14 @@ body {
 .hero-inner {
   position: relative;
   z-index: 2;
-  max-width: 800px;
   width: 100%;
+  max-width: 860px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
+  height: 100%;
+  justify-content: center;
 }
 
 /* Status badge */
@@ -342,13 +343,19 @@ body {
 /* ───── SQL DASHBOARD CARD (stitched) ───── */
 .dashboard-card {
   width: 100%;
-  max-width: 700px;
+  max-width: 860px;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(24px);
   border: 1px solid var(--border-strong);
   border-radius: 20px;
-  padding: 28px;
+  padding: 24px 28px;
   text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .dashboard-heading {
@@ -363,21 +370,22 @@ body {
   display: block;
   font-size: 0.85rem;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .prompt-input {
   width: 100%;
-  min-height: 90px;
-  padding: 12px 14px;
+  min-height: 70px;
+  max-height: 110px;
+  padding: 10px 14px;
   font-family: var(--font);
   font-size: 0.95rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   color: var(--text);
-  resize: vertical;
-  margin-bottom: 12px;
+  resize: none;
+  margin-bottom: 10px;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
@@ -396,7 +404,7 @@ body {
 .generate-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 4px;
+  margin-bottom: 12px;
 }
 
 /* Buttons */
@@ -419,12 +427,12 @@ body {
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: #0a0a0a;
+  background: #2596be;
+  color: #fff;
 }
 
 .btn-primary:hover {
-  background: #5dd9a8;
+  background: #1e7fa3;
 }
 
 .btn-primary:disabled {
@@ -445,14 +453,14 @@ body {
 
 /* SQL section */
 .sql-section {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .section-sub {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .sql-block {
@@ -463,15 +471,16 @@ body {
 
 .sql-text {
   flex: 1;
-  min-height: 80px;
-  padding: 12px 14px;
+  min-height: 60px;
+  max-height: 80px;
+  padding: 10px 14px;
   font-family: var(--font-mono);
   font-size: 0.82rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   color: var(--accent);
-  resize: vertical;
+  resize: none;
   white-space: pre-wrap;
   word-break: break-all;
 }
@@ -482,33 +491,39 @@ body {
 }
 
 .blocked-banner {
-  padding: 10px 14px;
-  margin-bottom: 10px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
   background: var(--danger-bg);
   border: 1px solid var(--danger);
   border-radius: var(--radius);
   color: var(--danger);
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 .results-section {
-  margin-top: 18px;
+  margin-top: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .results-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  font-size: 0.85rem;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
   color: var(--text-muted);
 }
 
 .results-table-wrap {
+  flex: 1;
   overflow: auto;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.02);
+  min-height: 0;
 }
 
 .results-table {
@@ -572,15 +587,16 @@ body {
 .hero-buttons {
   display: flex;
   flex-direction: row;
-  gap: 16px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  flex-wrap: nowrap;
   justify-content: center;
   padding-top: 8px;
 }
 
 .hero-btn-primary {
   padding: 14px 28px;
-  border-radius: 999px;
+  border-radius: 999px 0 0 999px;
   background: white;
   color: black;
   font-family: var(--font);
@@ -593,21 +609,55 @@ body {
 }
 
 .hero-btn-primary:hover {
-  transform: scale(1.05);
+  background: #f0f0f0;
 }
 .hero-btn-primary:active {
   transform: scale(0.97);
 }
 
+.scroll-mouse-inline {
+  width: 32px;
+  height: 52px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.scroll-dot {
+  width: 4px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  animation: scrollBounce 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 0.4;
+  }
+}
+
 .hero-btn-secondary {
   padding: 14px 28px;
-  border-radius: 999px;
+  border-radius: 0 999px 999px 0;
   background: rgba(255, 255, 255, 0.06);
   color: white;
   font-family: var(--font);
   font-weight: 700;
   font-size: 1rem;
-  border: 1px solid var(--border-strong);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: none;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -616,40 +666,143 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Scroll indicator */
-.scroll-indicator {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 2s infinite;
-}
-
-.scroll-mouse {
-  width: 24px;
-  height: 40px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 999px;
+/* ───── SIDEBAR ───── */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  z-index: 200;
   display: flex;
-  justify-content: center;
-  padding-top: 6px;
+  flex-direction: column;
+  padding: 16px 12px;
+  transition:
+    width 0.3s ease,
+    background 0.3s;
+  overflow: hidden;
 }
 
-.scroll-dot {
-  width: 4px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 999px;
+.sidebar.collapsed {
+  width: 64px;
 }
 
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(8px);
-  }
+.sidebar-collapse {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  transition:
+    background 0.15s,
+    transform 0.3s;
+  flex-shrink: 0;
+}
+
+.sidebar.collapsed .sidebar-collapse {
+  transform: rotate(180deg);
+}
+
+.sidebar-collapse:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  width: 100%;
+}
+
+.sidebar-item:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.sidebar-item-active {
+  background: #5b5bd6;
+  color: white;
+}
+
+.sidebar-item-active:hover {
+  background: #6366f1;
+  color: white;
+}
+
+.sidebar-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  transition: opacity 0.2s;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .sidebar-label {
+  opacity: 0;
+  width: 0;
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  color: #2596be;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  width: 100%;
+  transition: background 0.15s;
+}
+
+.sidebar-logout:hover {
+  background: rgba(37, 150, 190, 0.08);
+}
+
+/* Push main content when sidebar is present */
+#app {
+  padding-left: 220px;
+  transition: padding-left 0.3s ease;
+}
+
+#app.sidebar-collapsed {
+  padding-left: 64px;
 }
 
 /* ───── FEATURES ───── */
