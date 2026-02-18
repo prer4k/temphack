@@ -16,7 +16,7 @@ cd /Users/pwe/Code/hack
 npm install
 ```
 
-### Gemini API (optional)
+### Gemini API 
 
 NL2SQL uses **Gemini** when an API key is set. Get a key from [Google AI Studio](https://aistudio.google.com/apikey), then:
 
